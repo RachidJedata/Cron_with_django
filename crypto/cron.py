@@ -4,12 +4,11 @@ from .models import CryptoCurrency, CryptoPrice
 from django.conf import settings
 
 def fetchCryptoData():
-    API_KEY = os.getenv('CMC_PRO_API_KEY')
+    API_KEY = settings.CMC_PRO_API_KEY
     headers = {
         "Accept": "application/json",
         "X-CMC_PRO_API_KEY": API_KEY
     }
-    print("my key:", API_KEY)
     try:
         response = requests.get(settings.API_URL, headers=headers)
         if response.status_code != 200:

@@ -9,15 +9,17 @@ https://docs.djangoproject.com/en/5.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
-
 from pathlib import Path
 import os
-# import environ
-# env = environ.Env()
-# environ.Env.read_env()  # loads .env automatically
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+import environ
+env = environ.Env()
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))   # loads .env automatically
+# environ.Env.read_env()   # loads .env automatically
+
+
 
 
 # Quick-start development settings - unsuitable for production
@@ -128,12 +130,14 @@ STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
-API_URL = "https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest"
+
 
 CRONJOBS = [
-    ('* * * * *', 'crypto.cron.fetchCryptoData >> cron/cron.log 2>&1')
+    ('* * * * *', 'crypto.cron.fetchCryptoData', '>> /app/cron/cron.log 2>&1'),
 ]
 
-CRONTAB_ENVIRONMENT = {
-    "CMC_PRO_API_KEY": os.getenv("CMC_PRO_API_KEY"),
-}
+
+API_URL = "https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest"
+
+CMC_PRO_API_KEY = env("CMC_PRO_API_KEY")
+
